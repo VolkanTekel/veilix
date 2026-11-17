@@ -1,0 +1,16 @@
+.render-deps/
+__pycache__/
+app/bin/
+dist/
+*.pdb
+.tools/
+winui/bin/
+winui/obj/
+winui/.packages/
+diagnostics/**/bin/
+diagnostics/**/obj/
+diagnostics/symbols/
+diagnostics/tools/
+diagnostics/*.txt
+perf/*.json
+perf/*.csv

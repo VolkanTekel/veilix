@@ -1,0 +1,17 @@
+// GPL-3.0-or-later. Paired Bluetooth devices only; battery values come from Windows properties.
+using System;using System.Collections.Generic;using System.Linq;using System.Threading.Tasks;using System.Windows;using System.Windows.Controls;using System.Windows.Threading;
+namespace Ada {
+ public sealed class BluetoothBattery {public string Name,Id,Container;public int? Percent;public bool Connected;}
+ public sealed partial class AdaWindow {
+  readonly List<BluetoothBattery> bluetoothDevices=new List<BluetoothBattery>();StackPanel bluetoothRows;bool bluetoothBusy,bluetoothLoaded;string bluetoothError="";DateTime bluetoothUpdated=DateTime.MinValue;readonly DispatcherTimer bluetoothTick=new DispatcherTimer{Interval=TimeSpan.FromSeconds(90)};
+  void InitBluetooth(){bluetoothTick.Tick+=delegate{RefreshBluetooth();};Loaded+=delegate{if(!testing){bluetoothTick.Start();RefreshBluetooth();}};Closed+=delegate{bluetoothTick.Stop();};}
+  static int? BatteryPercent(object value){if(value==null)return null;try{int n=Convert.ToInt32(value);return n>=0&&n<=100?(int?)n:null;}catch{return null;}}
+  async void RefreshBluetooth(){if(testing||closing||bluetoothBusy)return;bluetoothBusy=true;try{
+   var rows=await ReadBluetooth();
+   if(closing)return;bluetoothDevices.Clear();foreach(var group in rows.GroupBy(r=>String.IsNullOrEmpty(r.Container)?r.Id:r.Container))bluetoothDevices.Add(group.OrderByDescending(r=>r.Percent.HasValue).First());bluetoothError="";bluetoothLoaded=true;bluetoothUpdated=DateTime.UtcNow;
+  }catch{if(!closing){bluetoothError="Cihaz bilgisi şu anda okunamıyor.";bluetoothLoaded=true;bluetoothUpdated=DateTime.UtcNow;}}finally{bluetoothBusy=false;if(!closing){UpdateBluetoothBadge();if(route=="controls")FillBluetoothRows();}}}
+  static Task<List<BluetoothBattery>> ReadBluetooth(){return Task.Run(()=>BluetoothProperties.Read());}
+  void RenderBluetooth(){Section("Bluetooth cihazları");bluetoothRows=new StackPanel();content.Children.Add(bluetoothRows);FillBluetoothRows();if(!testing&&(DateTime.UtcNow-bluetoothUpdated).TotalSeconds>60)Dispatcher.BeginInvoke(new Action(RefreshBluetooth),DispatcherPriority.Background);}
+  void FillBluetoothRows(){if(bluetoothRows==null||route!="controls")return;bluetoothRows.Children.Clear();if(bluetoothDevices.Count==0){var empty=Label(!bluetoothLoaded?"Cihazlar okunuyor…":bluetoothError.Length>0?bluetoothError:"Bağlı Bluetooth cihazı yok.",13,false,"Muted");empty.Margin=new Thickness(0,0,0,12);bluetoothRows.Children.Add(empty);return;}foreach(var device in bluetoothDevices){var row=new Grid();row.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(30)});row.ColumnDefinitions.Add(new ColumnDefinition());row.ColumnDefinitions.Add(new ColumnDefinition{Width=GridLength.Auto});row.Children.Add(Glyph("battery",21,"Accent"));var name=Label(device.Name,13,true);name.VerticalAlignment=VerticalAlignment.Center;name.Margin=new Thickness(6,0,8,0);Grid.SetColumn(name,1);row.Children.Add(name);var value=Label(device.Percent.HasValue?"%"+device.Percent.Value:"Pil bilgisi yok",13,device.Percent.HasValue,device.Percent.HasValue?"Text":"Muted");value.VerticalAlignment=VerticalAlignment.Center;value.TextTrimming=TextTrimming.None;value.MinWidth=device.Percent.HasValue?38:110;value.TextAlignment=TextAlignment.Right;Grid.SetColumn(value,2);row.Children.Add(value);var card=Card(row);card.Padding=new Thickness(10,9,10,9);card.Margin=new Thickness(0,0,0,6);bluetoothRows.Children.Add(card);}}
+ }
+}

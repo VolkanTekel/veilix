@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>false</ImportWindowsDesktopTargets>
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <DefineConstants>$(DefineConstants);WINUI;DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+    <StartupObject>Veilix.Program</StartupObject>
+    <ApplicationManifest>../app/app.manifest</ApplicationManifest>
+    <ApplicationIcon>../app/Ada.ico</ApplicationIcon>
+    <AssemblyName>Veilix</AssemblyName>
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
+    <RestorePackagesPath>$(MSBuildThisFileDirectory).packages</RestorePackagesPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
+    <ApplicationDefinition Include="App.xaml" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.WinUI" Version="2.3.9" />
+    <PackageReference Include="Microsoft.WindowsAppSDK.InteractiveExperiences" Version="2.1.9" />
+    <PackageReference Include="System.Management" Version="10.0.0" />
+    <PackageReference Include="WinUIEx" Version="2.9.3" />
+    <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.4.0" />
+    <Compile Include="../app/Services.cs;../app/MediaBackend.cs;../app/MediaService.cs;../app/MediaTransport.cs;../app/SpotifyHistory.cs;../app/AudioPeak.cs;../app/AudioNotices.cs;../app/BluetoothProperties.cs;../app/UtilityState.cs;../app/Weather.cs" LinkBase="Backend" />
+    <Compile Include="../app/MediaRecoveryChecks.cs" Link="Checks/MediaFakes.cs" />
+  </ItemGroup>
+  <Target Name="PublishVeilixXamlResources" AfterTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <ResolvedFileToPublish Include="$(TargetDir)Veilix.pri" RelativePath="Veilix.pri" CopyToPublishDirectory="PreserveNewest" />
+      <ResolvedFileToPublish Include="$(TargetDir)App.xbf" RelativePath="App.xbf" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
+</Project>

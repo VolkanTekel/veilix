@@ -1,0 +1,31 @@
+Veilix for Windows (formerly Halo / Ada) — 2026-10-21
+
+Ada is a Windows/WPF adaptation of interface and interaction patterns from
+Atoll (DynamicIsland), Copyright (C) 2024-2026 Atoll Contributors, including
+the floating capsule, minimal media layout and capsule-slider presentation.
+Atoll includes work originally from boring.notch. Ada is distributed under
+GPL-3.0-or-later; see LICENSE. Ada is not an official Atoll release.
+
+Reference snapshot: Ebullioscopic/Atoll
+https://github.com/Ebullioscopic/Atoll
+Commit: f039ca923d1bbbf17a3610ec2cfbf017ab3bd02d
+Original selected source notices remain under references/Atoll.
+Atoll's original logos, artwork and Lottie assets are not included in Ada.
+
+Interface-polish references by Jakub Krehel:
+https://github.com/jakubkrehel/skills
+https://www.ui-skills.com/skills/jakubkrehel/make-interfaces-feel-better
+
+Weather: Open-Meteo, https://open-meteo.com/ (attribution shown in the app).
+City search: Open-Meteo Geocoding / GeoNames. No automatic geolocation.
+
+This program is free software under GPL-3.0-or-later and comes WITHOUT
+ANY WARRANTY. You may redistribute and modify it under that license.
+All corresponding Ada source and build scripts accompany the executable.
+
+Fluent UI System Icons — Copyright (c) 2020 Microsoft Corporation.
+Original Microsoft SVG paths are used under the MIT License.
+https://github.com/microsoft/fluentui-system-icons
+Snapshot: 4c94ad5f4081168c0d45bdc368f230ecb757cd09
+See licenses/Fluent-System-Icons.txt in the binary package and app/Icons/LICENSE
+in source. UI source/credit blocks are intentionally absent from the personal UI.
